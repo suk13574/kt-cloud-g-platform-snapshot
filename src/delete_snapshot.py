@@ -81,7 +81,9 @@ class DeleteSnapshotManager(BaseManager):
 
                 job_id = res["deletesnapshotresponse"]["jobid"]
                 content = job_id + ", " + snapshot_name
-                threading.Thread(target=self.write_job_file, args=(content, JOB_FILE_PATH,)).start()
+                thread = threading.Thread(target=self.write_job_file, args=(content, JOB_FILE_PATH,))
+                thread.start()
+                thread.join()
 
                 _LOGGER.info(f"{snapshot_name} 스냅샷 삭제 API 호출 완료")
 

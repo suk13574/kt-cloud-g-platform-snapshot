@@ -67,7 +67,9 @@ class CreateSnapshotManager(BaseManager):
 
                     job_id = res["createsnapshotresponse"]["jobid"]
                     content = job_id + ", " + disk_name
-                    threading.Thread(target=self.write_job_file, args=(job_id, JOB_FILE_PATH,)).start()
+                    thread = threading.Thread(target=self.write_job_file, args=(content, JOB_FILE_PATH,))
+                    thread.start()
+                    thread.join()
 
                     _LOGGER.info(f"{disk_name} 스냅샷 생성 API 호출 완료")
 
