@@ -52,10 +52,9 @@ class BaseManager:
         :return: X
         """
         lock_file_path = job_file_path + ".lock"
-        lock = FileLock(lock_file_path)
+        lock = FileLock(lock_file_path, timeout=10)
 
         try:
-            lock.acquire()  # 파일 얻을 때 까지 무한정 대기, 파라미터로 timeout 줄 수 있음
             with lock:
                 with open(job_file_path, "a") as f:
                     f.write(f"{content}\n")
@@ -65,9 +64,6 @@ class BaseManager:
 
         except IOError as e:
             _LOGGER.error(f"Job ID({content}) 파일 쓰기 중 오류 발생: {e}")
-
-        finally:
-            lock.release()
 
     @classmethod
     def check_arg(cls, required_arg_list, arg_list) -> dict:
