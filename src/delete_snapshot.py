@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 import logging
 import time
 import threading
+from typing import List, Tuple
 
 import yaml
 from requests import HTTPError
@@ -94,7 +95,7 @@ class DeleteSnapshotManager(BaseManager):
 
         _LOGGER.info(f"{self.del_date} 스냅샷 삭제 완료")
 
-    def get_del_snapshot_list(self, del_date) -> dict:
+    def get_del_snapshot_list(self, del_date) -> list:
         """
         삭제할 스냅샷 아이디 리스트 반환
 

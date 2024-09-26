@@ -66,7 +66,7 @@ class CreateSnapshotManager(BaseManager):
                     res = self.g_platform_api.create_disk_snapshot(disk_id, snapshot_name)  # 스냅샷 생성 API 호출
 
                     job_id = res["createsnapshotresponse"]["jobid"]
-                    # self.write_job_file(job_id)
+                    content = job_id + ", " + disk_name
                     threading.Thread(target=self.write_job_file, args=(job_id, JOB_FILE_PATH,)).start()
 
                     _LOGGER.info(f"{disk_name} 스냅샷 생성 API 호출 완료")
