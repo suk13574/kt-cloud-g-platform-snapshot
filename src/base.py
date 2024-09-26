@@ -51,18 +51,13 @@ class BaseManager:
 
         :return: X
         """
-        lock_file_path = job_file_path + ".lock"
-        lock = FileLock(lock_file_path, timeout=10)
 
         try:
-            with lock:
-                with open(job_file_path, "a") as f:
-                    f.write(f"{content}\n")
-                    f.flush()
-        except Timeout:
-            _LOGGER.error(f"파일 잠금을 얻는 데 실패했습니다: {job_file_path}")
+            with open(job_file_path, "a") as f:
+                f.write(f"{content}\n")
+                f.flush()
 
-        except IOError as e:
+        except Exception as e:
             _LOGGER.error(f"Job ID({content}) 파일 쓰기 중 오류 발생: {e}")
 
     @classmethod
