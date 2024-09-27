@@ -174,6 +174,8 @@ python src/telegram.py --config=./src/config/config.yml
 삭제 수량 비교: {삭제 성공 개수} / {삭제 API 호출 수}
 ** 생성 진행 중({생성 중인 스냅샷 개수}), 삭제 진행 중({삭제 중인 스냅샷 개수})
 ```
+![image](https://github.com/user-attachments/assets/edbe8933-dcb6-4ffb-8b18-eebaf786bb52)
+
 
 <br>
 
