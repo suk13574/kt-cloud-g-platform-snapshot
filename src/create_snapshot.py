@@ -45,7 +45,7 @@ class CreateSnapshotManager(BaseManager):
         """
         today = datetime.now().strftime("%Y-%m-%d")
 
-        _LOGGER.info(f"{today} 스냅샷 생성 시작")
+        _LOGGER.info(f"==={today} 스냅샷 생성 시작===")
 
         # disk 정보 가져옴
         # e.g. disk_info = {"disk_name1":"disk_id1", "disk_name2":"disk_id2"}
@@ -69,10 +69,6 @@ class CreateSnapshotManager(BaseManager):
                     content = job_id + ", " + disk_name
                     self.write_job_file(content, JOB_FILE_PATH)
 
-                    # thread = threading.Thread(target=self.write_job_file, args=(content, JOB_FILE_PATH,))
-                    # thread.start()
-                    # thread.join()
-
                     _LOGGER.info(f"{disk_name} 스냅샷 생성 API 호출 완료")
 
                     time.sleep(WAIT_TIME)  # wait_time만큼 대기 후 다시 스냅샷 생성
@@ -85,7 +81,7 @@ class CreateSnapshotManager(BaseManager):
             else:
                 _LOGGER.error(f"디스크 이름: {disk_name}은 존재하지 않는 디스크입니다.")
 
-        _LOGGER.info(f"{today} 스냅샷 생성 완료")
+        _LOGGER.info(f"==={today} 스냅샷 생성 완료===")
 
     def get_disk_info(self) -> dict:
         """
@@ -116,10 +112,6 @@ class CreateSnapshotManager(BaseManager):
 
 
 if __name__ == "__main__":
-    # config_path = "./config/config.yml"
-    # create_snapshot_manager = CreateSnapshotManager(config_path)
-    # create_snapshot_manager.create_snapshot()
-
     required_arg_list = ["config", "disk_snapshot_list"]  # 필수 인자
     arg_dict = BaseManager.check_arg(required_arg_list, sys.argv[1:])
 

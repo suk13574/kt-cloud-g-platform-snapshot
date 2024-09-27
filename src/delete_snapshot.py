@@ -66,7 +66,7 @@ class DeleteSnapshotManager(BaseManager):
         :return: X 
         """
         
-        _LOGGER.info(f"{self.del_date} 스냅샷 삭제 시작")
+        _LOGGER.info(f"==={self.del_date} 스냅샷 삭제 시작===")
 
         # 삭제할 디스크 스냅샷 리스트 가져옴
         del_snapshot_list = self.get_del_snapshot_list(self.del_date)
@@ -83,10 +83,6 @@ class DeleteSnapshotManager(BaseManager):
                 content = job_id + ", " + snapshot_name
                 self.write_job_file(content, JOB_FILE_PATH)
 
-                # thread = threading.Thread(target=self.write_job_file, args=(content, JOB_FILE_PATH,))
-                # thread.start()
-                # thread.join()
-
                 _LOGGER.info(f"{snapshot_name} 스냅샷 삭제 API 호출 완료")
 
                 time.sleep(WAIT_TIME)  # wait_time만큼 대기 후 다시 스냅샷 삭제
@@ -97,7 +93,7 @@ class DeleteSnapshotManager(BaseManager):
             except KeyError as e:
                 _LOGGER.error(f"API 응답에 deletesnapshotresponse 또는 jobid가 없습니다: {e}")
 
-        _LOGGER.info(f"{self.del_date} 스냅샷 삭제 완료")
+        _LOGGER.info(f"==={self.del_date} 스냅샷 삭제 완료===")
 
     def get_del_snapshot_list(self, del_date) -> list:
         """
@@ -138,10 +134,6 @@ class DeleteSnapshotManager(BaseManager):
 
 
 if __name__ == "__main__":
-    # config_path = "./config/config.yml"
-    # delete_snapshot_manager = DeleteSnapshotManager(config_path)
-    # delete_snapshot_manager.delete_snapshot()
-
     required_arg_list = ["config", "del_day"]  # 필수 인자
     arg_dict = BaseManager.check_arg(required_arg_list, sys.argv[1:])
 

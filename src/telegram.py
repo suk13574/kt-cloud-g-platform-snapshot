@@ -43,6 +43,8 @@ class TelegramManager(BaseManager):
         :return: X 
         """
 
+        _LOGGER.info("===텔레그램 메세지 전송 시작===")
+
         create_success, create_total, create_processing = self.count_success_job("create_job_list")  # 스냅샷 생성
         delete_success, delete_total, delete_processing = self.count_success_job("delete_job_list")
         today = datetime.now().strftime("%Y-%m-%d")
@@ -118,7 +120,7 @@ class TelegramManager(BaseManager):
         res = requests.post(url, headers=headers, json=data)
 
         if res.status_code == 200:
-            _LOGGER.info("텔레그램 메세지 전송 성공")
+            _LOGGER.info("===텔레그램 메세지 전송 성공===")
         else:
             _LOGGER.error(f"텔레그램 메세지 전송 실패 (status code: {res.status_code}")
 
