@@ -19,7 +19,7 @@ class BaseManager:
         pass
 
     @staticmethod
-    def load_file(file_path: str, loader_func) -> str:
+    def load_file(file_path: str, loader_func=lambda f: f.read()) -> str:
         """
         파일 읽기 & 예외 처리
         
