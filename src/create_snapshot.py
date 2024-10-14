@@ -48,20 +48,21 @@ class CreateSnapshotManager(BaseManager):
         _LOGGER.info(f"==={today} 스냅샷 생성 시작===")
 
         # disk 정보 가져옴
-        # e.g. disk_info = {"disk_name1":"disk_id1", "disk_name2":"disk_id2"}
+        # e.g. disk_info = {"disk_name1":{"server_name1":"disk_id1"}", "disk_name2":{"server_name":"disk_id2"}}
         disk_info = self.get_disk_info()
 
         # 디스크 스냅샷 생성할 디스크 이름 파일 로드
-        disk_name_list = self.load_file(self.disk_list_path, lambda f: [line.strip() for line in f])
+        # e.g. disk_list = [("disk_name1", "server_name"), ("disk_name2", "server_name")]
+        disk_list = self.read_disk_list()
 
         # job file clear
         with open(JOB_FILE_PATH, "w") as f:
             f.truncate(0)
 
-        for disk_name in disk_name_list:
+        for disk_name, server_name in disk_list:
             if disk_name in disk_info:
                 try:
-                    disk_id = disk_info[disk_name]
+                    disk_id = disk_info[disk_name][server_name]
                     snapshot_name = f"{disk_name}-{today}"
                     res = self.g_platform_api.create_disk_snapshot(disk_id, snapshot_name)  # 스냅샷 생성 API 호출
 
@@ -78,10 +79,22 @@ class CreateSnapshotManager(BaseManager):
 
                 except Exception as e:
                     _LOGGER.error(f"{disk_name} 스냅샷 생성 중 오류 발생 \n {e}")
+                except KeyError as e:
+                    _LOGGER.error(f"disk_info에 해당하는 key 값이 없습니다. disk_name: {disk_name}, server_name: {server_name}")
             else:
                 _LOGGER.error(f"디스크 이름: {disk_name}은 존재하지 않는 디스크입니다.")
 
         _LOGGER.info(f"==={today} 스냅샷 생성 완료===")
+
+    def read_disk_list(self):
+        """
+        --disk_snapshot_list의 인자로 받은 파일로부터 디스크 정보를 읽어 특정 형태로 반환
+        
+        :return disk_list: key가 디스크 이름, value가 서버명: 디스크 아이디인 딕셔너리 반환 
+        """
+        
+        disk_name_list = self.load_file(self.disk_list_path, lambda f: [line.strip() for line in f])
+        return [tuple(map(str.strip, item.split(','))) for item in disk_name_list]
 
     def get_disk_info(self) -> dict:
         """
@@ -98,7 +111,8 @@ class CreateSnapshotManager(BaseManager):
 
             disk_info = {}
             for disk in disk_list:
-                disk_info[disk["name"]] = disk["id"]
+                if disk.get("vmdisplayname", None):
+                    disk_info.setdefault(disk["name"], {})[disk["vmdisplayname"]] = disk["id"]
 
             return disk_info
 
