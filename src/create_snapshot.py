@@ -4,7 +4,11 @@
 스냅샷을 생성합니다.
 필수 인자 값은 config와 disk_snapshot_list입니다.
 
-필수 인자 값에 대한 설명은 config 파일의 README.md를 참고하시면 됩니다.
+- config: kt cloud api key 값과 telegram 값을 작성한 설정 파일입니다.
+파일 형식은 README.md를 참고하시면 됩니다.
+
+- disk_sanpshot_list는 디스크명, 서버명의 리스트입니다.
+해당 디스크의 스냅샷을 생성합니다.
 
 """
 import os
@@ -50,7 +54,7 @@ class CreateSnapshotManager(BaseManager):
         # e.g. disk_info = {"disk_name1":{"server_name1":"disk_id1"}", "disk_name2":{"server_name":"disk_id2"}}
         disk_info = self.get_disk_info()
 
-        # 디스크 스냅샷 생성할 디스크 이름 파일 로드
+        # 디스크 스냅샷 생성할 디스크 이름 파일 읽은 후 (디스크 이름, 서버 이름) 튜플 리스트 반환
         # e.g. disk_list = [("disk_name1", "server_name"), ("disk_name2", "server_name")]
         disk_list = self.read_disk_list()
 
@@ -62,7 +66,13 @@ class CreateSnapshotManager(BaseManager):
             if disk_name in disk_info:
                 try:
                     disk_id = disk_info[disk_name][server_name]
-                    snapshot_name = f"{disk_name}-{today}"
+
+                    # sanpshot 이름 규칙: 디스크 이름-날짜
+                    if len(disk_info[disk_name]) > 1:  # 중복 디스크 이름이 있을 경우 디스크 이름-서버이름-날짜
+                        snapshot_name = f"{disk_name}-{server_name}-{today}"
+                    else:
+                        snapshot_name = f"{disk_name}-{today}"
+
                     res = self.g_platform_api.create_disk_snapshot(disk_id, snapshot_name)  # 스냅샷 생성 API 호출
 
                     job_id = res["createsnapshotresponse"]["jobid"]
