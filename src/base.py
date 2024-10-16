@@ -8,8 +8,6 @@ Manager 클래스의 베이스 클래스 (=부모 클래스)
 import sys
 import logging
 
-from filelock import FileLock, Timeout
-
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 _LOGGER = logging.getLogger(__name__)
 

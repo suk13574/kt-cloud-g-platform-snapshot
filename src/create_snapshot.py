@@ -12,7 +12,6 @@ import sys
 from datetime import datetime
 import logging
 import time
-import threading
 
 import yaml
 from requests import HTTPError

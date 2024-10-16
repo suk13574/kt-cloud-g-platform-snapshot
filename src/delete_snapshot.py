@@ -12,8 +12,6 @@ import sys
 from datetime import datetime, timedelta
 import logging
 import time
-import threading
-from typing import List, Tuple
 
 import yaml
 from requests import HTTPError
