@@ -127,10 +127,6 @@ class TelegramManager(BaseManager):
 
 
 if __name__ == "__main__":
-    # config_path = "./config/config.yml"
-    # telegram_manager = TelegramManager(config_path)
-    # telegram_manager.telegram()
-
     required_arg_list = ["config"]  # 필수 인자
     arg_dict = BaseManager.check_arg(required_arg_list, sys.argv[1:])
 

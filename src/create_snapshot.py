@@ -85,7 +85,6 @@ class CreateSnapshotManager(BaseManager):
 
                 except HTTPError as e:  # API 응답이 200이 아닐 시 API 에러 발생
                     _LOGGER.error(f"{disk_name} 스냅샷 생성 API 오류 발생 \n {e}")
-
                 except Exception as e:
                     _LOGGER.error(f"{disk_name} 스냅샷 생성 중 오류 발생 \n {e}")
                 except KeyError as e:
