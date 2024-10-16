@@ -17,7 +17,7 @@ import requests
 import yaml
 
 from api import GPlatformApi
-from base import BaseManager
+from src.common.base import BaseManager
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 _LOGGER = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TelegramManager(BaseManager):
-    def __init__(self, config_file: str, **arg):
+    def __init__(self, config_file="/etc/snapshot/config/config.yml", **arg):
         super().__init__()
         self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
@@ -127,8 +127,5 @@ class TelegramManager(BaseManager):
 
 
 if __name__ == "__main__":
-    required_arg_list = ["config"]  # 필수 인자
-    arg_dict = BaseManager.check_arg(required_arg_list, sys.argv[1:])
-
-    telegram_manager = TelegramManager(arg_dict["config"])
+    telegram_manager = TelegramManager("../../test/key/config.yml")
     telegram_manager.telegram()

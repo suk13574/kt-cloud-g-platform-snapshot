@@ -21,7 +21,7 @@ import yaml
 from requests import HTTPError
 
 from api import GPlatformApi
-from base import BaseManager
+from src.common.base import BaseManager
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 _LOGGER = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ WAIT_TIME = 60 * 5  # API 호출 주기
 
 
 class CreateSnapshotManager(BaseManager):
-    def __init__(self, config_file: str, disk_snapshot_list: str, **arg):
+    def __init__(self, config_file="/etc/snapshot/config/config.yml", disk_snapshot_list="/etc/snapshot/config/disk_list", **arg):
         super().__init__()
         self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
@@ -134,8 +134,5 @@ class CreateSnapshotManager(BaseManager):
 
 
 if __name__ == "__main__":
-    required_arg_list = ["config", "disk_snapshot_list"]  # 필수 인자
-    arg_dict = BaseManager.check_arg(required_arg_list, sys.argv[1:])
-
-    create_snapshot_manager = CreateSnapshotManager(arg_dict["config"], arg_dict["disk_snapshot_list"])
+    create_snapshot_manager = CreateSnapshotManager("../../test/key/config.yml", "../../test/key/disk_list")
     create_snapshot_manager.create_snapshot()
