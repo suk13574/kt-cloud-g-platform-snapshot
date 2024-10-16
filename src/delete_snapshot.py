@@ -2,9 +2,13 @@
 스냅샷 삭제
 ===
 스냅샷을 삭제합니다.
-필수 인자 값은 config입니다.
+필수 인자 값은 config, del_day입니다.
 
-필수 인자 값에 대한 설명은 config 파일의 README.md를 참고하시면 됩니다.
+- config: kt cloud api key 값과 telegram 값을 작성한 설정 파일입니다.
+파일 형식은 README.md를 참고하시면 됩니다.
+
+- del_day: del_day 전에 생성한 스냅샷을 삭제합니다.
+예를 들어, del_day=7d라면, 일주일 전에 생성한 스냅샷을 삭제합니다.
 
 """
 import os
