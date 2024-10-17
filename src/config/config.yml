@@ -1,8 +1,14 @@
 kt_cloud:
-  account_name: TEST  # KT Cloud 계정명 (이후 텔레그램 방에 전송될 때 사용)
-  api_key: YI***************************************  # KT Cloud API Key
-  secret_key: fg******************************************************************************  # KT Cloud Secret Key
+  account_name: ${ACCOUNT_NAME}
+  api_key: ${API_KEY}
+  secret_key: ${SECRET_KEY}
 
 telegram:
-  bot_token: 61*******:AA************************  # 텔레그램 봇 토큰
-  chat_id: -9******  # 보낼 텔레그램 채팅방 ID
+  bot_token: {BOT_TOKEN}
+  chat_id: {CHAT_ID}
+
+time:
+  start: {START_DAY}
+  cycle: {CYCLE}
+  create_time: ${CREATE_TIME}
+  delete_time: ${DELETE_TIME}

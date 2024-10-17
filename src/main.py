@@ -17,39 +17,44 @@ _LOGGER = logging.getLogger(__name__)
 
 CYCLE = 0
 START_DATE = None
-API_KEY = None
-SECRET_KEY = None
+CREATE_TIME = None
+DELETE_TIME = None
 
 
-def init(config_path="/etc/snapshot/config"):
-    global START_DATE, CYCLE, API_KEY, SECRET_KEY
+class ConfigError(Exception):
+    pass
 
-    config = BaseManager.load_file(config_path,  yaml.safe_load)
-    # config = BaseManager.load_file(config_path, yaml.safe_load)
-    cycle = str(config["time"]["cycle"])
+
+def init(config_path="./config/config.yml"):
+    global CYCLE, START_DATE, CREATE_TIME, DELETE_TIME
+
+    config = BaseManager.load_file(config_path, yaml.safe_load)
+
     try:
+        cycle = str(config["time"]["cycle"])
+        start_date = str(config["time"]["start"])
+        create_time = str(config["time"]["create_time"])
+        delete_time = str(config["time"]["delete_time"])
+
         if cycle[-1] == "d":
             CYCLE = int(cycle[:-1])
         else:
-            raise ValueError("config 파일의 time.cycle 포맷이 숫자d 형태가 아닙니다. (e.g. 3d)")
-    except ValueError as e:
-        _LOGGER.error(e)
-        sys.exit()
+            raise ConfigError("config 파일의 time.cycle 포맷이 숫자d 형태가 아닙니다. (e.g. 3d)")
 
-    start_date = str(config["time"]["start"])
-    try:
-        # 날짜가 'YYYY-MM-DD' 형식인지 확인하고 datetime 객체로 변환
         START_DATE = datetime.strptime(start_date, "%Y-%m-%d")
 
-    except ValueError as e:
-        _LOGGER.error("config 파일의 time.start 포맷이 YYYY-MM-DD형태가 아닙니다.")
-        sys.exit()
-    except Exception as e:
-        _LOGGER.error("config 파일의 time.start 초기화에 문제가 발생했습니다.", e)
-        sys.exit()
+        if datetime.strptime(create_time, "%H:%M") and datetime.strptime(delete_time, "%H:%M"):
+            CREATE_TIME = create_time
+            DELETE_TIME = delete_time
+        else:
+            raise ConfigError("config 파일의 time._time 포맷이 HH:MM 형태가 아닙니다.. (e.g. 09:30)")
 
-    API_KEY = config["kt_cloud"]["api_key"]
-    SECRET_KEY = config["kt_cloud"]["secret_key"]
+    except ConfigError as e:
+        _LOGGER.error(e)
+        sys.exit()
+    except ValueError as e:
+        _LOGGER.error("config 파일의 time.start 포맷이 YYYY-MM-DD형태가 아닙니다.", e)
+        sys.exit()
 
 
 def wait_until_start_date(start_date):
@@ -65,9 +70,9 @@ if __name__ == "__main__":
 
     wait_until_start_date(START_DATE)
 
-    schedule.every(CYCLE).days.at("00:00").do(lambda: CreateSnapshotManager().create_snapshot())
-    schedule.every(CYCLE).days.at("12:00").do(lambda: DeleteSnapshotManager().delete_snapshot())
-    schedule.every(CYCLE).days.at("23:00").do(lambda: TelegramManager("../test/key/config.yml").telegram())
+    schedule.every(CYCLE).days.at(CREATE_TIME).do(lambda: CreateSnapshotManager().create_snapshot())
+    schedule.every(CYCLE).days.at(DELETE_TIME).do(lambda: DeleteSnapshotManager().delete_snapshot())
+    schedule.every(CYCLE+1).days.at("09:30").do(lambda: TelegramManager("../test/key/config.yml").telegram())
 
     CreateSnapshotManager().create_snapshot()
 

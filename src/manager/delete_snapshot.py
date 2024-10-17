@@ -32,7 +32,7 @@ WAIT_TIME = 60 * 5  # API 호출 주기
 
 
 class DeleteSnapshotManager(BaseManager):
-    def __init__(self, config_file="/etc/snapshot/config/config.yml", **arg):
+    def __init__(self, config_file="./config/config.yml", **arg):
         super().__init__()
         self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
@@ -68,7 +68,6 @@ class DeleteSnapshotManager(BaseManager):
         :return: X 
         """
 
-        print(self.del_date)
         _LOGGER.info(f"==={self.del_date} 스냅샷 삭제 시작===")
 
         # 삭제할 디스크 스냅샷 리스트 가져옴
@@ -134,8 +133,3 @@ class DeleteSnapshotManager(BaseManager):
                 sys.exit()
 
         return del_snapshot_list
-
-
-if __name__ == "__main__":
-    delete_snapshot_manager = DeleteSnapshotManager("../../test/key/config.yml")
-    delete_snapshot_manager.delete_snapshot()

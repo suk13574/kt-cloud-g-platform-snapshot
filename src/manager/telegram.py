@@ -26,7 +26,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TelegramManager(BaseManager):
-    def __init__(self, config_file="/etc/snapshot/config/config.yml", **arg):
+    def __init__(self, config_file="./config/config.yml", **arg):
         super().__init__()
         self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
@@ -124,8 +124,3 @@ class TelegramManager(BaseManager):
             _LOGGER.info("===텔레그램 메세지 전송 성공===")
         else:
             _LOGGER.error(f"텔레그램 메세지 전송 실패 (status code: {res.status_code}")
-
-
-if __name__ == "__main__":
-    telegram_manager = TelegramManager("../../test/key/config.yml")
-    telegram_manager.telegram()

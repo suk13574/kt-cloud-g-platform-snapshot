@@ -32,7 +32,7 @@ WAIT_TIME = 60 * 5  # API 호출 주기
 
 
 class CreateSnapshotManager(BaseManager):
-    def __init__(self, config_file="/etc/snapshot/config/config.yml", disk_snapshot_list="/etc/snapshot/config/disk_list", **arg):
+    def __init__(self, config_file="./config/config.yml", disk_snapshot_list="/etc/snapshot/config/disk_list", **arg):
         super().__init__()
         self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
@@ -132,7 +132,3 @@ class CreateSnapshotManager(BaseManager):
             _LOGGER.error(f"디스크 리스트 API 응답에 해당하는 key 값이 없습니다: {e}")
             sys.exit()
 
-
-if __name__ == "__main__":
-    create_snapshot_manager = CreateSnapshotManager("../../test/key/config.yml", "../../test/key/disk_list")
-    create_snapshot_manager.create_snapshot()
