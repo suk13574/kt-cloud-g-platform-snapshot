@@ -32,7 +32,7 @@ def init(config_path="./config/config.yml"):
 
     try:
         cycle = str(config["time"]["cycle"])
-        start_date = str(config["time"]["start"])
+        start_date = str(config["time"]["start_date"])
         create_time = str(config["time"]["create_time"])
         delete_time = str(config["time"]["delete_time"])
 
@@ -53,7 +53,7 @@ def init(config_path="./config/config.yml"):
         _LOGGER.error(e)
         sys.exit()
     except ValueError as e:
-        _LOGGER.error("config 파일의 time.start 포맷이 YYYY-MM-DD형태가 아닙니다.", e)
+        _LOGGER.error("config 파일의 time.start_date 포맷이 YYYY-MM-DD형태가 아닙니다.", e)
         sys.exit()
 
 

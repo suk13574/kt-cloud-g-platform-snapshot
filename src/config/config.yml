@@ -8,7 +8,7 @@ telegram:
   chat_id: {CHAT_ID}
 
 time:
-  start: {START_DAY}
+  start_date: {START_DATE}
   cycle: {CYCLE}
   create_time: ${CREATE_TIME}
   delete_time: ${DELETE_TIME}
