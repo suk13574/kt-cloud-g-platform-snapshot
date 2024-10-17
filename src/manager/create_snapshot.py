@@ -20,7 +20,7 @@ import time
 import yaml
 from requests import HTTPError
 
-from api import GPlatformApi
+from src.manager.api import GPlatformApi
 from src.common.base import BaseManager
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")

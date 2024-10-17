@@ -20,7 +20,7 @@ import time
 import yaml
 from requests import HTTPError
 
-from api import GPlatformApi
+from src.manager.api import GPlatformApi
 from src.common.base import BaseManager
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
@@ -40,7 +40,7 @@ class DeleteSnapshotManager(BaseManager):
         self.secret_key = self.config["kt_cloud"]["secret_key"]
         self.g_platform_api = GPlatformApi(api_key=self.api_key, secret_key=self.secret_key)
 
-        self.del_date = self.calculate_del_date(self.config["time"]["delete_cycle"])
+        self.del_date = self.calculate_del_date(self.config["time"]["cycle"])
 
     @staticmethod
     def calculate_del_date(del_cycle: str) -> str:
@@ -78,23 +78,23 @@ class DeleteSnapshotManager(BaseManager):
         with open(JOB_FILE_PATH, "w") as f:
             f.truncate(0)
 
-        # for snapshot_name, snapshot_id in del_snapshot_list:
-        #     try:
-        #         res = self.g_platform_api.delete_disk_snapshot(snapshot_id)
-        #
-        #         job_id = res["deletesnapshotresponse"]["jobid"]
-        #         content = job_id + ", " + snapshot_name
-        #         self.write_job_file(content, JOB_FILE_PATH)
-        #
-        #         _LOGGER.info(f"{snapshot_name} 스냅샷 삭제 API 호출 완료")
-        #
-        #         time.sleep(WAIT_TIME)  # wait_time만큼 대기 후 다시 스냅샷 삭제
-        #
-        #     except HTTPError as e:  # API 응답이 200이 아닐 시 API 에러 발생
-        #         _LOGGER.error(f"{snapshot_name} 스냅샷 생성 API 오류 발생 \n {e}")
-        #
-        #     except KeyError as e:
-        #         _LOGGER.error(f"API 응답에 deletesnapshotresponse 또는 jobid가 없습니다: {e}")
+        for snapshot_name, snapshot_id in del_snapshot_list:
+            try:
+                res = self.g_platform_api.delete_disk_snapshot(snapshot_id)
+
+                job_id = res["deletesnapshotresponse"]["jobid"]
+                content = job_id + ", " + snapshot_name
+                self.write_job_file(content, JOB_FILE_PATH)
+
+                _LOGGER.info(f"{snapshot_name} 스냅샷 삭제 API 호출 완료")
+
+                time.sleep(WAIT_TIME)  # wait_time만큼 대기 후 다시 스냅샷 삭제
+
+            except HTTPError as e:  # API 응답이 200이 아닐 시 API 에러 발생
+                _LOGGER.error(f"{snapshot_name} 스냅샷 생성 API 오류 발생 \n {e}")
+
+            except KeyError as e:
+                _LOGGER.error(f"API 응답에 deletesnapshotresponse 또는 jobid가 없습니다: {e}")
 
         _LOGGER.info(f"==={self.del_date} 스냅샷 삭제 완료===")
 
