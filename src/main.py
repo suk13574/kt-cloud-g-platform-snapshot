@@ -30,6 +30,7 @@ class ConfigError(Exception):
 def init():
     global CYCLE, START_DATE, CREATE_TIME, DELETE_TIME
 
+    print(CONFIG_PATH)
     config = BaseManager.load_file(CONFIG_PATH, yaml.safe_load)
 
     cycle = str(config["time"]["cycle"])
@@ -76,7 +77,7 @@ if __name__ == "__main__":
 
     schedule.every(CYCLE).days.at(CREATE_TIME).do(lambda: CreateSnapshotManager().create_snapshot())
     schedule.every(CYCLE).days.at(DELETE_TIME).do(lambda: DeleteSnapshotManager().delete_snapshot())
-    schedule.every(CYCLE+1).days.at("09:30").do(lambda: TelegramManager("../test/key/config.yml").telegram())
+    schedule.every(CYCLE+1).days.at("09:30").do(lambda: TelegramManager().telegram())
 
     CreateSnapshotManager().create_snapshot()
 
