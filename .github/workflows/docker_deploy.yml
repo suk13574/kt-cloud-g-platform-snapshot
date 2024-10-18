@@ -32,6 +32,9 @@ jobs:
           time.create_time: ${{ secrets.CREATE_TIME }}
           time.delete_time: ${{ secrets.DELETE_TIME }}
 
+      - name: Debug - Print config.yml content
+        run: cat ./src/config/config.yml
+
       - name: Docker login
         uses: docker/login-action@v3
         with:
