@@ -1,14 +1,14 @@
 kt_cloud:
-  account_name: ${ACCOUNT_NAME}
-  api_key: ${API_KEY}
-  secret_key: ${SECRET_KEY}
+  account_name: {{ACCOUNT_NAME}}
+  api_key: {{API_KEY}}
+  secret_key: {{SECRET_KEY}}
 
 telegram:
-  bot_token: ${BOT_TOKEN}
-  chat_id: ${CHAT_ID}
+  bot_token: {{BOT_TOKEN}}
+  chat_id: {{CHAT_ID}}
 
 time:
-  start_date: ${START_DATE}
-  cycle: ${CYCLE}
-  create_time: ${CREATE_TIME}
-  delete_time: ${DELETE_TIME}
+  start_day: {{START_DATE}}
+  cycle: {{CYCLE}}
+  create_time: {{CREATE_TIME}}
+  delete_time: {{DELETE_TIME}}
