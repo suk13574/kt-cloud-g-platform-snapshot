@@ -32,16 +32,17 @@ def init():
 
     config = BaseManager.load_file(CONFIG_PATH, yaml.safe_load)
 
+    cycle = str(config["time"]["cycle"])
+    start_date = str(config["time"]["start_date"])
+    create_time = str(config["time"]["create_time"])
+    delete_time = str(config["time"]["delete_time"])
+
     try:
-        cycle = str(config["time"]["cycle"])
-        start_date = str(config["time"]["start_date"])
-        create_time = str(config["time"]["create_time"])
-        delete_time = str(config["time"]["delete_time"])
 
         if cycle[-1] == "d":
             CYCLE = int(cycle[:-1])
         else:
-            raise ConfigError("config 파일의 time.cycle 포맷이 숫자d 형태가 아닙니다. (e.g. 3d)")
+            raise ConfigError(f"config 파일의 time.cycle 포맷이 숫자d 형태가 아닙니다. (e.g. 3d) cycle: {cycle}")
 
         START_DATE = datetime.strptime(start_date, "%Y-%m-%d")
 
@@ -49,13 +50,14 @@ def init():
             CREATE_TIME = create_time
             DELETE_TIME = delete_time
         else:
-            raise ConfigError("config 파일의 time._time 포맷이 HH:MM 형태가 아닙니다.. (e.g. 09:30)")
+            raise ConfigError(f"config 파일의 time._time 포맷이 HH:MM 형태가 아닙니다. (e.g. 09:30) "
+                              f"create_time: {create_time}, delete_time: {delete_time}")
 
     except ConfigError as e:
         _LOGGER.error(e)
         sys.exit()
     except ValueError as e:
-        _LOGGER.error("config 파일의 time.start_date 포맷이 YYYY-MM-DD형태가 아닙니다.", e)
+        _LOGGER.error(f"config 파일의 time.start_date 포맷이 YYYY-MM-DD형태가 아닙니다. start_date: {start_date}")
         sys.exit()
 
 
