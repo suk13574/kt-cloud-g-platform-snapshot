@@ -8,4 +8,6 @@ COPY disk_snapshot_list /etc/snapshot/config
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+ENV PYTHONPATH=/app
+
 CMD ["python", "src/main.py"]
