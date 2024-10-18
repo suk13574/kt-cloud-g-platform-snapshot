@@ -1,4 +1,5 @@
 import logging
+import os
 import sys
 
 import schedule
@@ -8,6 +9,7 @@ from datetime import datetime
 import yaml
 
 from src.common.base import BaseManager
+from src.common.config import CONFIG_PATH
 from src.manager.create_snapshot import CreateSnapshotManager
 from src.manager.delete_snapshot import DeleteSnapshotManager
 from src.manager.telegram import TelegramManager
@@ -25,10 +27,10 @@ class ConfigError(Exception):
     pass
 
 
-def init(config_path="./config/config.yml"):
+def init():
     global CYCLE, START_DATE, CREATE_TIME, DELETE_TIME
 
-    config = BaseManager.load_file(config_path, yaml.safe_load)
+    config = BaseManager.load_file(CONFIG_PATH, yaml.safe_load)
 
     try:
         cycle = str(config["time"]["cycle"])

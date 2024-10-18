@@ -16,6 +16,7 @@ import logging
 import requests
 import yaml
 
+from src.common.config import CONFIG_PATH
 from src.manager.api import GPlatformApi
 from src.common.base import BaseManager
 
@@ -26,7 +27,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TelegramManager(BaseManager):
-    def __init__(self, config_file="./config/config.yml", **arg):
+    def __init__(self, config_file=CONFIG_PATH, **arg):
         super().__init__()
         self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 

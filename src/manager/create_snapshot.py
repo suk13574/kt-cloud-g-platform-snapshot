@@ -20,6 +20,7 @@ import time
 import yaml
 from requests import HTTPError
 
+from src.common.config import CONFIG_PATH
 from src.manager.api import GPlatformApi
 from src.common.base import BaseManager
 
@@ -32,7 +33,7 @@ WAIT_TIME = 60 * 5  # API 호출 주기
 
 
 class CreateSnapshotManager(BaseManager):
-    def __init__(self, config_file="./config/config.yml", disk_snapshot_list="/etc/snapshot/config/disk_list", **arg):
+    def __init__(self, config_file=CONFIG_PATH, disk_snapshot_list="/etc/snapshot/config/disk_list", **arg):
         super().__init__()
         self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
@@ -73,15 +74,15 @@ class CreateSnapshotManager(BaseManager):
                     else:
                         snapshot_name = f"{disk_name}-{today}"
 
-                    res = self.g_platform_api.create_disk_snapshot(disk_id, snapshot_name)  # 스냅샷 생성 API 호출
-
-                    job_id = res["createsnapshotresponse"]["jobid"]
-                    content = job_id + ", " + disk_name
-                    self.write_job_file(content, JOB_FILE_PATH)
-
-                    _LOGGER.info(f"{disk_name} 스냅샷 생성 API 호출 완료")
-
-                    time.sleep(WAIT_TIME)  # wait_time만큼 대기 후 다시 스냅샷 생성
+                    # res = self.g_platform_api.create_disk_snapshot(disk_id, snapshot_name)  # 스냅샷 생성 API 호출
+                    #
+                    # job_id = res["createsnapshotresponse"]["jobid"]
+                    # content = job_id + ", " + disk_name
+                    # self.write_job_file(content, JOB_FILE_PATH)
+                    #
+                    # _LOGGER.info(f"{disk_name} 스냅샷 생성 API 호출 완료")
+                    #
+                    # time.sleep(WAIT_TIME)  # wait_time만큼 대기 후 다시 스냅샷 생성
 
                 except HTTPError as e:  # API 응답이 200이 아닐 시 API 에러 발생
                     _LOGGER.error(f"{disk_name} 스냅샷 생성 API 오류 발생 \n {e}")

@@ -20,6 +20,7 @@ import time
 import yaml
 from requests import HTTPError
 
+from src.common.config import CONFIG_PATH
 from src.manager.api import GPlatformApi
 from src.common.base import BaseManager
 
@@ -32,7 +33,7 @@ WAIT_TIME = 60 * 5  # API 호출 주기
 
 
 class DeleteSnapshotManager(BaseManager):
-    def __init__(self, config_file="./config/config.yml", **arg):
+    def __init__(self, config_file=CONFIG_PATH, **arg):
         super().__init__()
         self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
