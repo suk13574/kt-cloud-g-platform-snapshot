@@ -9,14 +9,12 @@ API 호출에 대한 결과를 텔레그램 메세지로 전송합니다.
 
 """
 import os
-import sys
 from datetime import datetime
 import logging
 
 import requests
-import yaml
 
-from src.common.config import CONFIG_PATH
+from src.common.config import CONFIG_PATH, KT_CLOUD_API_KEY, KT_CLOUD_SECRET_KEY, TELEGRAM_CHAT_ID, TELEGRAM_BOT_TOKEN
 from src.manager.api import GPlatformApi
 from src.common.base import BaseManager
 
@@ -29,13 +27,12 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 class TelegramManager(BaseManager):
     def __init__(self, config_file=CONFIG_PATH, **arg):
         super().__init__()
-        self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
-        self.bot_token = self.config["telegram"]["bot_token"]
-        self.chat_id = self.config["telegram"]["chat_id"]
+        self.bot_token = TELEGRAM_BOT_TOKEN
+        self.chat_id = TELEGRAM_CHAT_ID
 
-        self.api_key = self.config["kt_cloud"]["api_key"]
-        self.secret_key = self.config["kt_cloud"]["secret_key"]
+        self.api_key = KT_CLOUD_API_KEY
+        self.secret_key = KT_CLOUD_SECRET_KEY
         self.g_platform_api = GPlatformApi(api_key=self.api_key, secret_key=self.secret_key)
 
     def telegram(self) -> None:

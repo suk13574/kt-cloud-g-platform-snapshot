@@ -17,10 +17,9 @@ from datetime import datetime
 import logging
 import time
 
-import yaml
 from requests import HTTPError
 
-from src.common.config import CONFIG_PATH, DISK_LIST_PATH
+from src.common.config import CONFIG_PATH, DISK_LIST_PATH, KT_CLOUD_API_KEY, KT_CLOUD_SECRET_KEY
 from src.manager.api import GPlatformApi
 from src.common.base import BaseManager
 
@@ -35,10 +34,9 @@ WAIT_TIME = 60 * 5  # API 호출 주기
 class CreateSnapshotManager(BaseManager):
     def __init__(self, config_file=CONFIG_PATH, disk_snapshot_list=DISK_LIST_PATH, **arg):
         super().__init__()
-        self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
-        self.api_key = self.config["kt_cloud"]["api_key"]
-        self.secret_key = self.config["kt_cloud"]["secret_key"]
+        self.api_key = KT_CLOUD_API_KEY
+        self.secret_key = KT_CLOUD_SECRET_KEY
         self.g_platform_api = GPlatformApi(api_key=self.api_key, secret_key=self.secret_key)
 
         self.disk_list_path = disk_snapshot_list

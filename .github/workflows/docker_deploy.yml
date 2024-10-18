@@ -1,4 +1,4 @@
-name: "[Dispath] Docker push"
+name: "[Dispatch] Docker push"
 
 on:
   workflow_dispatch:
@@ -16,45 +16,25 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
-#      - name: Set project from github secret
-#        uses: microsoft/variable-substitution@v1
-#        with:
-#          files: ./src/config/config.yml
-#        env:
-#          kt_cloud.account_name: ${{ secrets.ACCOUNT_NAME }}
-#          kt_cloud.api_key: ${{ secrets.API_KEY }}
-#          kt_cloud.secret_key: ${{ secrets.SECRET_KEY }}
-#          telegram.bot_token: ${{ secrets.BOT_TOKEN }}
-#          telegram.chat_id: ${{ secrets.CHAT_ID }}
-#          time.start_day: ${{ secrets.START_DATE }}
-#          time.cycle: ${{ secrets.CYCLE }}
-#          time.create_time: ${{ secrets.CREATE_TIME }}
-#          time.delete_time: ${{ secrets.DELETE_TIME }}
-
-      - name: Replace secrets in config.yml
-        run: |
-          sed -i 's/{{kt_cloud.account_name}}/${{ secrets.ACCOUNT_NAME }}/g' ./src/config/config.yml
-          sed -i 's/{{kt_cloud.api_key}}/${{ secrets.API_KEY }}/g' ./src/config/config.yml
-          sed -i 's/{{kt_cloud.secret_key}}/${{ secrets.SECRET_KEY }}/g' ./src/config/config.yml
-          sed -i 's/{{telegram.bot_token}}/${{ secrets.BOT_TOKEN }}/g' ./src/config/config.yml
-          sed -i 's/{{telegram.chat_id}}/${{ secrets.CHAT_ID }}/g' ./src/config/config.yml
-          sed -i 's/{{time.start_day}}/${{ secrets.START_DATE }}/g' ./src/config/config.yml
-          sed -i 's/{{time.cycle}}/${{ secrets.CYCLE }}/g' ./src/config/config.yml
-          sed -i 's/{{time.create_time}}/${{ secrets.CREATE_TIME }}/g' ./src/config/config.yml
-          sed -i 's/{{time.delete_time}}/${{ secrets.DELETE_TIME }}/g' ./src/config/config.yml
-
-      - name: Debug - Print config.yml content
-        run: cat ./src/config/config.yml
 
       - name: Docker login
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ env.VERSION }}
+          build-args: |
+            KT_CLOUD_ACCOUNT_NAME=${{ secrets.ACCOUNT_NAME }}
+            KT_CLOUD_API_KEY=${{ secrets.API_KEY }}
+            KT_CLOUD_SECRET_KEY=${{ secrets.SECRET_KEY }}
+            TELEGRAM_BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+            TELEGRAM_CHAT_ID=${{ secrets.CHAT_ID }}
+            TIME_START_DATE=${{ secrets.START_DATE }}
+            TIME_CYCLE=${{ secrets.CYCLE }}
+            TIME_CREATE_TIME=${{ secrets.CREATE_TIME }}
+            TIME_DELETE_TIME=${{ secrets.DELETE_TIME }}

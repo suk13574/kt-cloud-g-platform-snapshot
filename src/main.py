@@ -1,15 +1,11 @@
 import logging
-import os
 import sys
 
 import schedule
 import time
 from datetime import datetime
 
-import yaml
-
-from src.common.base import BaseManager
-from src.common.config import CONFIG_PATH
+from src.common.config import TIME_CYCLE, TIME_START_DATE, TIME_CREATE_TIME, TIME_DELETE_TIME
 from src.manager.create_snapshot import CreateSnapshotManager
 from src.manager.delete_snapshot import DeleteSnapshotManager
 from src.manager.telegram import TelegramManager
@@ -17,48 +13,30 @@ from src.manager.telegram import TelegramManager
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 _LOGGER = logging.getLogger(__name__)
 
-CYCLE = 0
-START_DATE = None
-CREATE_TIME = None
-DELETE_TIME = None
-
 
 class ConfigError(Exception):
     pass
 
 
 def init():
-    global CYCLE, START_DATE, CREATE_TIME, DELETE_TIME
-
-    print(CONFIG_PATH)
-    config = BaseManager.load_file(CONFIG_PATH, yaml.safe_load)
-
-    cycle = str(config["time"]["cycle"])
-    start_date = str(config["time"]["start_date"])
-    create_time = str(config["time"]["create_time"])
-    delete_time = str(config["time"]["delete_time"])
-
     try:
 
-        if cycle[-1] == "d":
-            CYCLE = int(cycle[:-1])
-        else:
-            raise ConfigError(f"config 파일의 time.cycle 포맷이 숫자d 형태가 아닙니다. (e.g. 3d) cycle: {cycle}")
+        if not isinstance(TIME_CYCLE, int):
+            raise ConfigError(f"time.cycle 포맷이 숫자가 아닙니다. (e.g. 3) cycle: {TIME_CYCLE}")
 
-        START_DATE = datetime.strptime(start_date, "%Y-%m-%d")
+        start_date = datetime.strptime(TIME_START_DATE, "%Y-%m-%d")
 
-        if datetime.strptime(create_time, "%H:%M") and datetime.strptime(delete_time, "%H:%M"):
-            CREATE_TIME = create_time
-            DELETE_TIME = delete_time
-        else:
-            raise ConfigError(f"config 파일의 time._time 포맷이 HH:MM 형태가 아닙니다. (e.g. 09:30) "
-                              f"create_time: {create_time}, delete_time: {delete_time}")
+        if not datetime.strptime(TIME_CREATE_TIME, "%H:%M") and datetime.strptime(TIME_DELETE_TIME, "%H:%M"):
+            raise ConfigError(f"time._time 포맷이 HH:MM 형태가 아닙니다. (e.g. 09:30) "
+                              f"create_time: {TIME_CREATE_TIME}, delete_time: {TIME_DELETE_TIME}")
+
+        return start_date
 
     except ConfigError as e:
         _LOGGER.error(e)
         sys.exit()
     except ValueError as e:
-        _LOGGER.error(f"config 파일의 time.start_date 포맷이 YYYY-MM-DD형태가 아닙니다. start_date: {start_date}")
+        _LOGGER.error(f"time.start_date 포맷이 YYYY-MM-DD형태가 아닙니다. start_date: {start_date}")
         sys.exit()
 
 
@@ -71,13 +49,13 @@ def wait_until_start_date(start_date):
 
 
 if __name__ == "__main__":
-    init()
+    start_date = init()
 
-    wait_until_start_date(START_DATE)
+    wait_until_start_date(start_date)
 
-    schedule.every(CYCLE).days.at(CREATE_TIME).do(lambda: CreateSnapshotManager().create_snapshot())
-    schedule.every(CYCLE).days.at(DELETE_TIME).do(lambda: DeleteSnapshotManager().delete_snapshot())
-    schedule.every(CYCLE+1).days.at("09:30").do(lambda: TelegramManager().telegram())
+    schedule.every(TIME_CYCLE).days.at(TIME_CREATE_TIME).do(lambda: CreateSnapshotManager().create_snapshot())
+    schedule.every(TIME_CYCLE).days.at(TIME_DELETE_TIME).do(lambda: DeleteSnapshotManager().delete_snapshot())
+    schedule.every(TIME_CYCLE+1).days.at("09:30").do(lambda: TelegramManager().telegram())
 
     CreateSnapshotManager().create_snapshot()
 
