@@ -66,7 +66,7 @@ def wait_until_start_date(start_date):
 
 
 if __name__ == "__main__":
-    init("../test/key/config.yml")
+    init()
 
     wait_until_start_date(START_DATE)
 
