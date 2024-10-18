@@ -19,6 +19,6 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", str(config["telegram"]
 TELEGRAM_CHAT_ID = os. environ.get("TELEGRAM_CHAT_ID", str(config["telegram"]["chat_id"]))
 
 TIME_CYCLE = int(os.environ.get("TIME_CYCLE", str(config["time"]["cycle"])))
-TIME_START_DATE = os.environ.get("TIME_START_DAY", str(config["time"]["start_date"]))
-TIME_CREATE_TIME = os.environ.get("TIME_CREATE_TIME", str(config["time"]["create_time"]))
-TIME_DELETE_TIME = os.environ.get("TIME_DELETE_TIME", str(config["time"]["delete_time"]))
+TIME_START_DATE = str(os.environ.get("TIME_START_DATE", config["time"]["start_date"]))
+TIME_CREATE_TIME = str(os.environ.get("TIME_CREATE_TIME", config["time"]["create_time"]))
+TIME_DELETE_TIME = str(os.environ.get("TIME_DELETE_TIME", config["time"]["delete_time"]))
