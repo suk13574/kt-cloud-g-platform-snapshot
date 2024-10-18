@@ -36,7 +36,7 @@ def init():
         _LOGGER.error(e)
         sys.exit()
     except ValueError as e:
-        _LOGGER.error(f"time.start_date 포맷이 YYYY-MM-DD형태가 아닙니다. start_date: {start_date}")
+        _LOGGER.error(f"time.start_date 포맷이 YYYY-MM-DD형태가 아닙니다. start_date: {TIME_START_DATE}")
         sys.exit()
 
 
