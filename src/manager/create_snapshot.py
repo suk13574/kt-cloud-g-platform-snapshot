@@ -74,15 +74,15 @@ class CreateSnapshotManager(BaseManager):
                     else:
                         snapshot_name = f"{disk_name}-{today}"
 
-                    # res = self.g_platform_api.create_disk_snapshot(disk_id, snapshot_name)  # 스냅샷 생성 API 호출
-                    #
-                    # job_id = res["createsnapshotresponse"]["jobid"]
-                    # content = job_id + ", " + disk_name
-                    # self.write_job_file(content, JOB_FILE_PATH)
-                    #
-                    # _LOGGER.info(f"{disk_name} 스냅샷 생성 API 호출 완료")
-                    #
-                    # time.sleep(WAIT_TIME)  # wait_time만큼 대기 후 다시 스냅샷 생성
+                    res = self.g_platform_api.create_disk_snapshot(disk_id, snapshot_name)  # 스냅샷 생성 API 호출
+
+                    job_id = res["createsnapshotresponse"]["jobid"]
+                    content = job_id + ", " + disk_name
+                    self.write_job_file(content, JOB_FILE_PATH)
+
+                    _LOGGER.info(f"{disk_name} 스냅샷 생성 API 호출 완료")
+
+                    time.sleep(WAIT_TIME)  # wait_time만큼 대기 후 다시 스냅샷 생성
 
                 except HTTPError as e:  # API 응답이 200이 아닐 시 API 에러 발생
                     _LOGGER.error(f"{disk_name} 스냅샷 생성 API 오류 발생 \n {e}")
