@@ -1,15 +1,5 @@
 """
-스냅샷 생성 모듈
-===
-스냅샷을 생성합니다.
-필수 인자 값은 config와 disk_snapshot_list입니다.
-
-- config: kt cloud api key 값과 telegram 값을 작성한 설정 파일입니다.
-파일 형식은 README.md를 참고하시면 됩니다.
-
-- disk_sanpshot_list는 디스크명, 서버명의 리스트입니다.
-해당 디스크의 스냅샷을 생성합니다.
-
+스냅샷 생성
 """
 import os
 import sys
@@ -97,13 +87,18 @@ class CreateSnapshotManager(BaseManager):
 
     def read_disk_list(self):
         """
-        --disk_snapshot_list의 인자로 받은 파일로부터 디스크 정보를 읽어 특정 형태로 반환
-        
-        :return disk_list: key가 디스크 이름, value가 서버명: 디스크 아이디인 딕셔너리 반환 
+        :return disk_list: key가 디스크 이름, value가 서버명: 디스크 아이디인 딕셔너리 반환
         """
         
         disk_name_list = self.load_file(self.disk_list_path, lambda f: [line.strip() for line in f])
-        return [tuple(map(str.strip, item.split(','))) for item in disk_name_list]
+
+        disk_list = []
+        for disk_name in disk_name_list:
+            if disk_name.strip():
+                disk_server = disk_name.split(",")
+                disk_list.append(tuple(name.strip() for name in disk_server))
+
+        return disk_list
 
     def get_disk_info(self) -> dict:
         """
