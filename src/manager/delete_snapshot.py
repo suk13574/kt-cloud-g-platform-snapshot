@@ -36,7 +36,7 @@ class DeleteSnapshotManager(BaseManager):
     @staticmethod
     def calculate_del_date(del_cycle: str) -> str:
         """
-        del_day 인자 체크
+        del_date 인자 체크
 
         :param del_cycle: 오늘부터 며칠 전의 스냅샷을 삭제할지 지정
 
@@ -103,24 +103,19 @@ class DeleteSnapshotManager(BaseManager):
             res = self.g_platform_api.list_disk_snapshot()
             snapshot_list = res["listsnapshotsresponse"]["snapshot"]
 
-        except HTTPError as e:
-            _LOGGER.error("디스크 스냅샷 API 응답 코드가 200이 아닙니다.")
-            sys.exit()
-
-        except KeyError as e:
-            _LOGGER.error(f"디스크 스냅샷 API 응답에 listsnapshotsresponse 또는 snapshot이 없습니다. \n {e}")
-            sys.exit()
-
-        del_snapshot_list = []
-        for snapshot in snapshot_list:
-            try:
+            del_snapshot_list = []
+            for snapshot in snapshot_list:
                 snapshot_name_date = snapshot["name"].split("_")[-1]
 
                 if snapshot_name_date.startswith(del_date.replace("-", "")):
                     del_snapshot_list.append((snapshot["name"], snapshot["id"]))
 
-            except KeyError as e:
-                _LOGGER.error(f"디스크 스냅샷 리스트 API 응답에 name 또는 id가 없습니다. \n {e}")
-                sys.exit()
+            return del_snapshot_list
 
-        return del_snapshot_list
+        except HTTPError as e:
+            _LOGGER.error(f"디스크 스냅샷 API 응답 코드가 200이 아닙니다: {e}")
+
+        except KeyError as e:
+            _LOGGER.error(f"디스크 스냅샷 API 응답에 listsnapshotsresponse 또는 snapshot이 없습니다. \n {e}")
+
+

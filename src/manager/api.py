@@ -85,7 +85,6 @@ class GPlatformApi:
         if res.status_code >= 400:
             _LOGGER.error(f"API 호출 에러 - URL: {url}, status code: {res.status_code}, body: {res.text}")
             raise HTTPError(f"Request Fail - {res.status_code} \n{res.json()}")
-            # sys.exit("Program terminated due to request failure")
 
         return res.json()
 

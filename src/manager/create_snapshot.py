@@ -76,10 +76,11 @@ class CreateSnapshotManager(BaseManager):
 
                 except HTTPError as e:  # API 응답이 200이 아닐 시 API 에러 발생
                     _LOGGER.error(f"{disk_name} 스냅샷 생성 API 오류 발생 \n {e}")
-                except Exception as e:
-                    _LOGGER.error(f"{disk_name} 스냅샷 생성 중 오류 발생 \n {e}")
                 except KeyError as e:
                     _LOGGER.error(f"disk_info에 해당하는 key 값이 없습니다. disk_name: {disk_name}, server_name: {server_name}")
+                except Exception as e:
+                    _LOGGER.error(f"{disk_name} 스냅샷 생성 중 오류 발생 \n {e}")
+
             else:
                 _LOGGER.error(f"디스크 이름: {disk_name}은 존재하지 않는 디스크입니다.")
 
@@ -121,10 +122,8 @@ class CreateSnapshotManager(BaseManager):
             return disk_info
 
         except HTTPError as e:
-            _LOGGER.error("디스크 스냅샷 API 응답 코드가 200이 아닙니다.")
-            sys.exit()
+            _LOGGER.error(f"디스크 스냅샷 API 응답 코드가 200이 아닙니다: {e}")
 
         except KeyError as e:
             _LOGGER.error(f"디스크 리스트 API 응답에 해당하는 key 값이 없습니다: {e}")
-            sys.exit()
 
