@@ -80,7 +80,7 @@ class CreateSnapshotManager(BaseManager):
                     content = job_id + ", " + disk_name
                     self.write_job_file(content, JOB_FILE_PATH)
 
-                    _LOGGER.info(f"{disk_name} 스냅샷 생성 API 호출 완료")
+                    _LOGGER.info(f"{disk_name}({server_name}) 스냅샷 생성 API 호출 완료")
 
                     time.sleep(WAIT_TIME)  # wait_time만큼 대기 후 다시 스냅샷 생성
 
