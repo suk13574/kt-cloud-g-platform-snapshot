@@ -1,4 +1,4 @@
-name: "[Dispath] Docker push"
+name: "[Dispatch] Docker push"
 
 on:
   workflow_dispatch:
@@ -16,24 +16,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
-      - name: Set project from github secret
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ./src/config/config.yml
-        env:
-          kt_cloud.account_name: ${{ secrets.ACCOUNT_NAME }}
-          kt_cloud.api_key: ${{ secrets.API_KEY }}
-          kt_cloud.secret_key: ${{ secrets.SECRET_KEY }}
-          telegram.bot_token: ${{ secrets.BOT_TOKEN }}
-          telegram.chat_id: ${{ secrets.CHAT_ID }}
-          time.start_day: ${{ secrets.START_DATE }}
-          time.cycle: ${{ secrets.CYCLE }}
-          time.create_time: ${{ secrets.CREATE_TIME }}
-          time.delete_time: ${{ secrets.DELETE_TIME }}
-
-      - name: Debug - Print config.yml content
-        run: cat ./src/config/config.yml
 
       - name: Docker login
         uses: docker/login-action@v3

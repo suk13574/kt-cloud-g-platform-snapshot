@@ -1,5 +1,4 @@
 import logging
-import os
 import sys
 
 import schedule
@@ -27,11 +26,10 @@ class ConfigError(Exception):
     pass
 
 
-def init():
+def init(config_path=CONFIG_PATH):
     global CYCLE, START_DATE, CREATE_TIME, DELETE_TIME
 
-    print(CONFIG_PATH)
-    config = BaseManager.load_file(CONFIG_PATH, yaml.safe_load)
+    config = BaseManager.load_file(config_path, yaml.safe_load)
 
     cycle = str(config["time"]["cycle"])
     start_date = str(config["time"]["start_date"])
