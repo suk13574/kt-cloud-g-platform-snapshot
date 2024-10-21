@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . /app
 
-COPY disk_snapshot_list /etc/snapshot/config
+RUN mkdir -p /etc/snapshot/config
 
 RUN pip install --no-cache-dir -r requirements.txt
 
