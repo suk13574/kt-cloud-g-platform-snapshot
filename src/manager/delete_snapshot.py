@@ -6,6 +6,7 @@ import sys
 from datetime import datetime, timedelta
 import logging
 import time
+from threading import Timer
 
 import yaml
 from requests import HTTPError
@@ -13,6 +14,7 @@ from requests import HTTPError
 from src.common.config import CONFIG_PATH
 from src.manager.api import GPlatformApi
 from src.common.base import BaseManager
+from src.manager.telegram import TelegramManager
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 _LOGGER = logging.getLogger(__name__)
@@ -60,6 +62,8 @@ class DeleteSnapshotManager(BaseManager):
         """
 
         _LOGGER.info(f"==={self.del_date} 스냅샷 삭제 시작===")
+
+        self.send_telegram_in_next_day()
 
         # 삭제할 디스크 스냅샷 리스트 가져옴
         del_snapshot_list = self.get_del_snapshot_list(self.del_date)
@@ -118,4 +122,10 @@ class DeleteSnapshotManager(BaseManager):
         except KeyError as e:
             _LOGGER.error(f"디스크 스냅샷 API 응답에 listsnapshotsresponse 또는 snapshot이 없습니다. \n {e}")
 
+    def send_telegram_in_next_day(self):
+        now = datetime.now()
+        next_day = now + timedelta(days=1)
+        telegram_time = datetime.combine(next_day, datetime.strptime("09:30", "%H:%M").time())
+        delay = (telegram_time - now).total_seconds()
 
+        Timer(delay, TelegramManager().telegram).start()

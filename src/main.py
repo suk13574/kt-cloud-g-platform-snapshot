@@ -57,7 +57,7 @@ def init(config_path=CONFIG_PATH):
         _LOGGER.error(e)
         sys.exit()
     except ValueError as e:
-        _LOGGER.error(f"config 파일의 time.start_date 포맷이 YYYY-MM-DD형태가 아닙니다. start_date: {start_date}")
+        _LOGGER.error(f"config 파일의 time.start_date 포맷이 YYYY-MM-DD형태가 아닙니다. (e.g. 2024-10-21) start_date: {start_date}")
         sys.exit()
 
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     schedule.every(CYCLE).days.at(CREATE_TIME).do(lambda: CreateSnapshotManager().create_snapshot())
     schedule.every(CYCLE).days.at(DELETE_TIME).do(lambda: DeleteSnapshotManager().delete_snapshot())
-    schedule.every(CYCLE+1).days.at("09:30").do(lambda: TelegramManager().telegram())
+    # schedule.every(CYCLE).days.at("09:30").do(lambda: TelegramManager().telegram())
 
     CreateSnapshotManager().create_snapshot()
 
