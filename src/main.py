@@ -32,16 +32,17 @@ def init(config_path=CONFIG_PATH):
     config = BaseManager.load_file(config_path, yaml.safe_load)
 
     cycle = str(config["time"]["cycle"])
+    del_cycle = str(config["time"]["del_cycle"])
     start_date = str(config["time"]["start_date"])
     create_time = str(config["time"]["create_time"])
     delete_time = str(config["time"]["delete_time"])
 
     try:
 
-        if cycle[-1] == "d":
+        if cycle[-1] == "d" and del_cycle[-1] == "d":
             CYCLE = int(cycle[:-1])
         else:
-            raise ConfigError(f"config 파일의 time.cycle 포맷이 숫자d 형태가 아닙니다. (e.g. 3d) cycle: {cycle}")
+            raise ConfigError(f"config 파일의 time._cycle 포맷이 숫자d 형태가 아닙니다. (e.g. 3d) cycle: {cycle}")
 
         START_DATE = datetime.strptime(start_date, "%Y-%m-%d")
 

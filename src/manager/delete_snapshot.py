@@ -31,7 +31,7 @@ class DeleteSnapshotManager(BaseManager):
         self.secret_key = self.config["kt_cloud"]["secret_key"]
         self.g_platform_api = GPlatformApi(api_key=self.api_key, secret_key=self.secret_key)
 
-        self.del_date = self.calculate_del_date(self.config["time"]["cycle"])
+        self.del_date = self.calculate_del_date(self.config["time"]["del_cycle"])
 
     @staticmethod
     def calculate_del_date(del_cycle: str) -> str:

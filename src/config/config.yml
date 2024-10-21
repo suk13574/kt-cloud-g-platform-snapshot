@@ -11,5 +11,6 @@ telegram:
 time:
   start_date: $(START_DATE)
   cycle: $(CYCLE)
+  del_cycle: $(DEL_CYCLE)
   create_time: $(CREATE_TIME)
   delete_time: $(DELETE_TIME)
