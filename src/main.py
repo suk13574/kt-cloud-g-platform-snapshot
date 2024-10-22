@@ -11,7 +11,6 @@ from src.common.base import BaseManager
 from src.common.config import CONFIG_PATH
 from src.manager.create_snapshot import CreateSnapshotManager
 from src.manager.delete_snapshot import DeleteSnapshotManager
-from src.manager.telegram import TelegramManager
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 _LOGGER = logging.getLogger(__name__)
@@ -76,7 +75,6 @@ if __name__ == "__main__":
 
     schedule.every(CYCLE).days.at(CREATE_TIME).do(lambda: CreateSnapshotManager().create_snapshot())
     schedule.every(CYCLE).days.at(DELETE_TIME).do(lambda: DeleteSnapshotManager().delete_snapshot())
-    # schedule.every(CYCLE).days.at("09:30").do(lambda: TelegramManager().telegram())
 
     CreateSnapshotManager().create_snapshot()
 
