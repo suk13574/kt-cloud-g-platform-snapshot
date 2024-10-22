@@ -77,7 +77,8 @@ class CreateSnapshotManager(BaseManager):
                 except HTTPError as e:  # API 응답이 200이 아닐 시 API 에러 발생
                     _LOGGER.error(f"{disk_name} 스냅샷 생성 API 오류 발생 \n {e}")
                 except KeyError as e:
-                    _LOGGER.error(f"disk_info에 해당하는 key 값이 없습니다. disk_name: {disk_name}, server_name: {server_name}"
+                    _LOGGER.error(f"disk_info에 해당하는 key 값이 없습니다. 디스크가 서버에 연결되어 있는지 확인해주세요."
+                                  f" disk_name: {disk_name}, server_name: {server_name}"
                                   f", disk_info[{disk_name}]: {disk_info.get(disk_name)}")
                 except Exception as e:
                     _LOGGER.error(f"{disk_name} 스냅샷 생성 중 오류 발생 \n {e}")
@@ -117,8 +118,8 @@ class CreateSnapshotManager(BaseManager):
 
             disk_info = {}
             for disk in disk_list:
-                vm_name = disk.get("vmdisplayname", "--")
-                disk_info.setdefault(disk["name"], {})[vm_name] = disk["id"]
+                if disk.get("vmdisplayname", None):
+                    disk_info.setdefault(disk["name"], {})[disk["vmdisplayname"]] = disk["id"]
 
             return disk_info
 
