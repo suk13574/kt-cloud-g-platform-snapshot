@@ -10,4 +10,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 ENV PYTHONPATH=/app
 
+ENV TZ Asia/Seoul
+
 CMD ["python", "src/main.py"]
