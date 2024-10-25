@@ -61,7 +61,7 @@ class DeleteSnapshotManager(BaseManager):
         :return: X 
         """
 
-        _LOGGER.info(f"==={self.del_date} 스냅샷 삭제 시작===")
+        _LOGGER.info(f"==={self.del_date}일자 스냅샷 삭제 시작===")
 
         self.send_telegram_in_next_day()
 
@@ -128,4 +128,5 @@ class DeleteSnapshotManager(BaseManager):
         telegram_time = datetime.combine(next_day, datetime.strptime("09:30", "%H:%M").time())
         delay = (telegram_time - now).total_seconds()
 
+        _LOGGER.info(f"텔레그램 메세지가 {telegram_time}에 전송됩니다.")
         Timer(delay, TelegramManager().telegram).start()
