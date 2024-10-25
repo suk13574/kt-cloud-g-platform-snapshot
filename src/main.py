@@ -61,6 +61,7 @@ def init(config_path=CONFIG_PATH):
 
 
 def wait_until_start_date(start_date):
+    _LOGGER.info(f"{start_date}에 스냅샷 생성을 시작합니다.")
     now = datetime.now()
     while now < start_date:
         time_to_wait = (start_date - now).total_seconds()
