@@ -2,7 +2,6 @@
 스냅샷 삭제
 """
 import os
-import sys
 from datetime import datetime, timedelta
 import logging
 import time
@@ -109,9 +108,7 @@ class DeleteSnapshotManager(BaseManager):
 
             del_snapshot_list = []
             for snapshot in snapshot_list:
-                snapshot_name_date = snapshot["name"].split("_")[-1]
-
-                if snapshot_name_date.startswith(del_date.replace("-", "")):
+                if self.del_date in snapshot["name"]:
                     del_snapshot_list.append((snapshot["name"], snapshot["id"]))
 
             return del_snapshot_list
