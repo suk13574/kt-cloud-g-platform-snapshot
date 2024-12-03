@@ -27,6 +27,7 @@ class TelegramManager(BaseManager):
         self.bot_token = self.config["telegram"]["bot_token"]
         self.chat_id = self.config["telegram"]["chat_id"]
 
+        self.account_name = self.config["kt_cloud"]["account_name"]
         self.api_key = self.config["kt_cloud"]["api_key"]
         self.secret_key = self.config["kt_cloud"]["secret_key"]
         self.g_platform_api = GPlatformApi(api_key=self.api_key, secret_key=self.secret_key)
@@ -44,7 +45,7 @@ class TelegramManager(BaseManager):
         delete_success, delete_total, delete_processing = self.count_success_job("delete_job_list")
         today = datetime.now().strftime("%Y-%m-%d")
 
-        message = (f"[TEST] {today} 스냅샷 백업 동작 결과\n"
+        message = (f"[{self.account_name}] {today} 스냅샷 백업 동작 결과\n"
                    f"생성 수량 비교 : {create_success} / {create_total} \n"
                    f"삭제 수량 비교 : {delete_success} / {delete_total} \n"
                    f"** 생성 진행 중({create_processing}), 삭제 진행 중({delete_processing})"
