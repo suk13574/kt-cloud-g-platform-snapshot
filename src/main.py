@@ -78,6 +78,7 @@ if __name__ == "__main__":
     schedule.every(CYCLE).days.at(DELETE_TIME).do(lambda: DeleteSnapshotManager().delete_snapshot())
 
     CreateSnapshotManager().create_snapshot()
+    DeleteSnapshotManager().delete_snapshot()
 
     while True:
         schedule.run_pending()
