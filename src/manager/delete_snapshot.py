@@ -26,6 +26,7 @@ WAIT_TIME = 60 * 5  # API 호출 주기
 class DeleteSnapshotManager(BaseManager):
     def __init__(self, config_file=CONFIG_PATH, **arg):
         super().__init__()
+        self.config_path = config_file
         self.config = self.load_file(config_file, yaml.safe_load)  # 설정 파일 로드
 
         self.api_key = self.config["kt_cloud"]["api_key"]
@@ -126,4 +127,4 @@ class DeleteSnapshotManager(BaseManager):
         delay = (telegram_time - now).total_seconds()
 
         _LOGGER.info(f"텔레그램 메세지가 {telegram_time}에 전송됩니다.")
-        Timer(delay, TelegramManager().telegram).start()
+        Timer(delay, TelegramManager(self.config_path).telegram).start()
