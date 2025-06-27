@@ -19,10 +19,10 @@ kt cloud G 플랫폼에 있는 Disk 대상으로 주기별로 스냅샷을 생�
 
 ## 🚀 Install
 
-1. **이미지 pull**
+1. **이미지 빌드**
 
 ```bash
-docker pull suk13574/kt-cloud-g-platform-snapshot
+docker build -t kt-cloud-g-platform-snapshot .
 ```
 
 2. **config 파일 작성**
@@ -44,13 +44,13 @@ config 파일 작성한 경로를 컨테이너 내부에 마운트해준다.
 컨테이너 내부 경로는 `/etc/snapshot/config/` 로 고정되어 있다.
 
 ```bash
-docker run -d -v <config 디렉토리 경로>:/etc/snapshot/config/ --name <컨테이너이름> suk13574/kt-cloud-g-platform-snapshot
+docker run -d -v <config 디렉토리 경로>:/etc/snapshot/config/ --name <컨테이너이름> kt-cloud-g-platform-snapshot
 ```
 
 e.g. /opt.snapshot에 config 파일이 있고, 컨테이너 이름이 snaphost_test인 경우
 
 ```bash
-docker run -d -v /opt/snapshot/:/etc/snapshot/config/ --name snapshot_test suk13574/kt-cloud-g-platform-snapshot
+docker run -d -v /opt/snapshot/:/etc/snapshot/config/ --name snapshot_test kt-cloud-g-platform-snapshot
 ```
 
 4. 실행 확인
